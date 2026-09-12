@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RestSync | Science-Backed Sleep Optimization</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 0.3; }
+        }
+        .breathing-circle { animation: pulse-slow 19s infinite ease-in-out; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen">
+    <header class="border-b border-slate-800 p-4 flex justify-between items-center max-w-5xl mx-auto">
+        <h1 class="text-2xl font-bold text-indigo-400">RestSync</h1>
+        <a href="#pricing" class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg font-medium text-sm transition">Get Started</a>
+    </header>
+
+    <main class="max-w-4xl mx-auto p-6 space-y-12">
+        <section class="text-center space-y-4 py-8">
+            <h2 class="text-4xl font-extrabold text-slate-50">Reset Your Circadian Rhythm</h2>
+            <p class="text-slate-400 text-lg">Science-backed sound entrainment & melatonin optimization algorithms.</p>
+        </section>
+
+        <!-- Sound Engine -->
+        <section class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-6">
+            <h3 class="text-xl font-bold text-indigo-300">1. Melatonin Sound Generator</h3>
+            <p class="text-sm text-slate-400">Tap below to activate realtime Web Audio frequencies designed to trigger relaxation.</p>
+            <div class="flex flex-wrap gap-3">
+                <button onclick="playFreq(432)" class="bg-indigo-950 border border-indigo-500 px-4 py-2 rounded-lg text-indigo-200">Theta 432Hz</button>
+                <button onclick="playFreq(100)" class="bg-indigo-950 border border-indigo-500 px-4 py-2 rounded-lg text-indigo-200">Delta 2.5Hz</button>
+                <button onclick="stopSound()" class="bg-rose-950 border border-rose-500 px-4 py-2 rounded-lg text-rose-200">Stop Sound</button>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="space-y-6">
+            <h3 class="text-2xl font-bold text-center">Select Your Plan</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
+                    <h4 class="text-lg font-bold">Basic Sleep Sync</h4>
+                    <p class="text-3xl font-extrabold">$10 <span class="text-sm text-slate-400 font-normal">/ month</span></p>
+                    <ul class="text-sm text-slate-300 space-y-2">
+                        <li>✓ Basic Circadian Assessment</li>
+                        <li>✓ Delta Wave Frequencies</li>
+                    </ul>
+                    <button class="w-full bg-slate-800 hover:bg-slate-700 py-2 rounded-lg font-semibold">Subscribe $10</button>
+                </div>
+                <div class="bg-indigo-950 border border-indigo-500 p-6 rounded-xl space-y-4 relative">
+                    <span class="absolute -top-3 right-4 bg-indigo-500 text-xs px-2 py-1 rounded font-bold">RECOMMENDED</span>
+                    <h4 class="text-lg font-bold">Pro Melatonin Suite</h4>
+                    <p class="text-3xl font-extrabold">$15 <span class="text-sm text-slate-400 font-normal">/ month</span></p>
+                    <ul class="text-sm text-slate-300 space-y-2">
+                        <li>✓ Full Sound Engine (All Beats)</li>
+                        <li>✓ Automated Melatonin Schedules</li>
+                    </ul>
+                    <button class="w-full bg-indigo-600 hover:bg-indigo-500 py-2 rounded-lg font-semibold">Subscribe $15</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let audioCtx;
+        let osc;
+
+        function playFreq(freq) {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (osc) osc.stop();
+            osc = audioCtx.createOscillator();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            osc.connect(audioCtx.destination);
+            osc.start();
+        }
+
+        function stopSound() {
+            if (osc) osc.stop();
+        }
+    </script>
+</body>
+  </html>
+  
