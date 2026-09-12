@@ -1,87 +1,290 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RestSync | Science-Backed Sleep Optimization</title>
+    <title>RestSync | Melatonin & Circadian Optimization</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @keyframes pulse-slow {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.15); opacity: 0.3; }
+        @keyframes breath {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            36% { transform: scale(1.6); opacity: 0.9; }
+            63% { transform: scale(1.6); opacity: 0.9; }
         }
-        .breathing-circle { animation: pulse-slow 19s infinite ease-in-out; }
+        .breathing-ring { animation: breath 19s infinite ease-in-out; }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans min-h-screen">
-    <header class="border-b border-slate-800 p-4 flex justify-between items-center max-w-5xl mx-auto">
-        <h1 class="text-2xl font-bold text-indigo-400">RestSync</h1>
-        <a href="#pricing" class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg font-medium text-sm transition">Get Started</a>
+
+    <!-- Navigation -->
+    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur fixed top-0 w-full z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center font-bold text-white">R</div>
+                <span class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">RestSync</span>
+            </div>
+            <a href="#pricing" class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg text-sm font-semibold transition">Get Access</a>
+        </div>
     </header>
 
-    <main class="max-w-4xl mx-auto p-6 space-y-12">
-        <section class="text-center space-y-4 py-8">
-            <h2 class="text-4xl font-extrabold text-slate-50">Reset Your Circadian Rhythm</h2>
-            <p class="text-slate-400 text-lg">Science-backed sound entrainment & melatonin optimization algorithms.</p>
+    <main class="max-w-5xl mx-auto px-4 pt-28 pb-16 space-y-20">
+
+        <!-- Hero Section -->
+        <section class="text-center space-y-6 max-w-3xl mx-auto">
+            <span class="bg-indigo-950 text-indigo-300 border border-indigo-800 text-xs px-3 py-1 rounded-full uppercase tracking-wider font-semibold">Circadian Biology Platform</span>
+            <h1 class="text-4xl md:text-6xl font-extrabold text-slate-50 leading-tight">Master Your Sleep Architecture & Melatonin Production</h1>
+            <p class="text-slate-400 text-lg">Science-backed sound entrainment, personalized circadian scheduling, and interactive sleep diagnostic tools in one unified dashboard.</p>
         </section>
 
-        <!-- Sound Engine -->
-        <section class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-6">
-            <h3 class="text-xl font-bold text-indigo-300">1. Melatonin Sound Generator</h3>
-            <p class="text-sm text-slate-400">Tap below to activate realtime Web Audio frequencies designed to trigger relaxation.</p>
-            <div class="flex flex-wrap gap-3">
-                <button onclick="playFreq(432)" class="bg-indigo-950 border border-indigo-500 px-4 py-2 rounded-lg text-indigo-200">Theta 432Hz</button>
-                <button onclick="playFreq(100)" class="bg-indigo-950 border border-indigo-500 px-4 py-2 rounded-lg text-indigo-200">Delta 2.5Hz</button>
-                <button onclick="stopSound()" class="bg-rose-950 border border-rose-500 px-4 py-2 rounded-lg text-rose-200">Stop Sound</button>
+        <!-- Tool 1: Sleep Assessment Quiz -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-6">
+            <div class="border-b border-slate-800 pb-4">
+                <h2 class="text-2xl font-bold text-indigo-400">1. Interactive Sleep Diagnostic Audit</h2>
+                <p class="text-sm text-slate-400">Answer 3 questions to calculate your circadian baseline score.</p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">How long does it usually take you to fall asleep?</label>
+                    <select id="q1" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-slate-200">
+                        <option value="30">Less than 15 minutes</option>
+                        <option value="20">15 to 30 minutes</option>
+                        <option value="10">30 to 60 minutes</option>
+                        <option value="0">More than 1 hour</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">How often do you wake up during the night?</label>
+                    <select id="q2" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-slate-200">
+                        <option value="30">Rarely / Never</option>
+                        <option value="20">Once per night</option>
+                        <option value="10">2-3 times per night</option>
+                        <option value="0">4+ times per night</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-2">Do you view direct morning sunlight within 1 hour of waking?</label>
+                    <select id="q3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-slate-200">
+                        <option value="40">Yes, daily (15+ mins)</option>
+                        <option value="20">Sometimes</option>
+                        <option value="0">No / Mostly indoors</option>
+                    </select>
+                </div>
+                <button onclick="calculateScore()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded-lg font-bold text-slate-100 transition">Calculate Sleep Score</button>
+            </div>
+            <div id="quizResult" class="hidden p-4 rounded-lg bg-slate-950 border border-indigo-900 text-center space-y-2">
+                <p class="text-slate-400 text-sm">Your Circadian Health Score:</p>
+                <p id="scoreDisplay" class="text-4xl font-extrabold text-indigo-400">0/100</p>
+                <p id="scoreAdvice" class="text-sm text-slate-300"></p>
+            </div>
+        </section>
+
+        <!-- Tool 2: Sleep Cycle Calculator -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-6">
+            <div class="border-b border-slate-800 pb-4">
+                <h2 class="text-2xl font-bold text-indigo-400">2. Sleep Cycle & REM Calculator</h2>
+                <p class="text-sm text-slate-400">Calculate optimal wake-up times based on complete 90-minute REM cycles.</p>
+            </div>
+            <div class="flex flex-col md:flex-row gap-4 items-end">
+                <div class="w-full">
+                    <label class="block text-sm font-medium text-slate-300 mb-2">What time do you plan to go to sleep?</label>
+                    <input type="time" id="bedTimeInput" value="22:30" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-slate-200">
+                </div>
+                <button onclick="calculateCycles()" class="w-full md:w-auto bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-lg font-bold transition">Calculate Times</button>
+            </div>
+            <div id="cycleResults" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4 pt-4"></div>
+        </section>
+
+        <!-- Tool 3: Melatonin Sound Generator -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-6">
+            <div class="border-b border-slate-800 pb-4">
+                <h2 class="text-2xl font-bold text-indigo-400">3. Melatonin & Brainwave Sound Generator</h2>
+                <p class="text-sm text-slate-400">Synthesizes real-time sound entrainment frequencies. <em>(Note: Wear stereo headphones for binaural beats to work properly!)</em></p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-4">
+                <button onclick="playAudio('theta')" class="p-4 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500 text-left space-y-2 transition">
+                    <div class="font-bold text-indigo-300">Theta Melatonin Wave (432 Hz)</div>
+                    <p class="text-xs text-slate-400">Helps quiet brain activity and transition into evening relaxation.</p>
+                </button>
+                <button onclick="playAudio('delta')" class="p-4 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500 text-left space-y-2 transition">
+                    <div class="font-bold text-indigo-300">Delta Deep Sleep Beat (2.5 Hz)</div>
+                    <p class="text-xs text-slate-400">Requires headphones. Creates a 2.5Hz frequency pulse for slow-wave sleep.</p>
+                </button>
+                <button onclick="playAudio('brown')" class="p-4 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500 text-left space-y-2 transition">
+                    <div class="font-bold text-indigo-300">Deep Brown Noise</div>
+                    <p class="text-xs text-slate-400">Low-frequency acoustic noise to block out background distractions.</p>
+                </button>
+                <button onclick="stopAudio()" class="p-4 rounded-xl bg-rose-950/40 border border-rose-800 hover:bg-rose-900 text-rose-200 font-bold flex items-center justify-center transition">
+                    Stop Audio Playback
+                </button>
+            </div>
+            <div class="text-center pt-2">
+                <span id="audioStatus" class="text-xs font-mono text-indigo-400">Status: Audio Idle</span>
+            </div>
+        </section>
+
+        <!-- Tool 4: 4-7-8 Breathing Rings -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-6 text-center">
+            <div class="border-b border-slate-800 pb-4">
+                <h2 class="text-2xl font-bold text-indigo-400">4. Interactive 4-7-8 Breathing Ring</h2>
+                <p class="text-sm text-slate-400">Inhale for 4s, Hold for 7s, Exhale for 8s to slow down heart rate before bed.</p>
+            </div>
+            <div class="py-12 flex justify-center items-center">
+                <div class="relative w-32 h-32 flex justify-center items-center">
+                    <div class="absolute inset-0 rounded-full bg-indigo-500/20 border border-indigo-500/40 breathing-ring"></div>
+                    <div class="w-16 h-16 rounded-full bg-indigo-600 flex items-center justify-center font-bold text-xs text-white">Breathe</div>
+                </div>
             </div>
         </section>
 
         <!-- Pricing Section -->
-        <section id="pricing" class="space-y-6">
-            <h3 class="text-2xl font-bold text-center">Select Your Plan</h3>
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
-                    <h4 class="text-lg font-bold">Basic Sleep Sync</h4>
-                    <p class="text-3xl font-extrabold">$10 <span class="text-sm text-slate-400 font-normal">/ month</span></p>
-                    <ul class="text-sm text-slate-300 space-y-2">
-                        <li>✓ Basic Circadian Assessment</li>
-                        <li>✓ Delta Wave Frequencies</li>
-                    </ul>
-                    <button class="w-full bg-slate-800 hover:bg-slate-700 py-2 rounded-lg font-semibold">Subscribe $10</button>
+        <section id="pricing" class="space-y-8 pt-6">
+            <div class="text-center space-y-2">
+                <h2 class="text-3xl font-extrabold text-slate-50">Global Access Plans</h2>
+                <p class="text-slate-400 text-sm">Choose your circadian plan to unlock full features.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Basic Plan -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-bold">Basic Sleep Sync</h3>
+                        <div class="text-3xl font-extrabold">$10 <span class="text-sm font-normal text-slate-400">/ month</span></div>
+                        <ul class="text-sm text-slate-300 space-y-3">
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-emerald-400 mr-2"></i> Sleep Diagnostic Audit Access</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-emerald-400 mr-2"></i> 90-Minute Sleep Cycle Calculator</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-emerald-400 mr-2"></i> Basic 432Hz Sound Entrainment</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="block w-full text-center bg-slate-800 hover:bg-slate-700 py-3 rounded-lg font-bold text-sm transition">Subscribe $10/mo</a>
                 </div>
-                <div class="bg-indigo-950 border border-indigo-500 p-6 rounded-xl space-y-4 relative">
-                    <span class="absolute -top-3 right-4 bg-indigo-500 text-xs px-2 py-1 rounded font-bold">RECOMMENDED</span>
-                    <h4 class="text-lg font-bold">Pro Melatonin Suite</h4>
-                    <p class="text-3xl font-extrabold">$15 <span class="text-sm text-slate-400 font-normal">/ month</span></p>
-                    <ul class="text-sm text-slate-300 space-y-2">
-                        <li>✓ Full Sound Engine (All Beats)</li>
-                        <li>✓ Automated Melatonin Schedules</li>
-                    </ul>
-                    <button class="w-full bg-indigo-600 hover:bg-indigo-500 py-2 rounded-lg font-semibold">Subscribe $15</button>
+                <!-- Pro Plan -->
+                <div class="bg-indigo-950/60 border border-indigo-500 rounded-2xl p-6 space-y-6 flex flex-col justify-between relative">
+                    <span class="absolute -top-3 right-6 bg-indigo-500 text-slate-950 font-bold text-xs px-3 py-1 rounded-full uppercase">Most Popular</span>
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-bold text-indigo-300">Pro Melatonin Suite</h3>
+                        <div class="text-3xl font-extrabold text-white">$15 <span class="text-sm font-normal text-slate-400">/ month</span></div>
+                        <ul class="text-sm text-slate-300 space-y-3">
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-indigo-400 mr-2"></i> Everything in Basic Plan</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-indigo-400 mr-2"></i> Full Audio Suite (Theta, Delta, Brown Noise)</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-indigo-400 mr-2"></i> Dynamic Melatonin Protocol Generator</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-indigo-400 mr-2"></i> 4-7-8 Deep Breathing Suite</li>
+                        </ul>
+                    </div>
+                    <a href="#" class="block w-full text-center bg-indigo-600 hover:bg-indigo-500 py-3 rounded-lg font-bold text-sm text-white transition">Subscribe $15/mo</a>
                 </div>
             </div>
         </section>
+
     </main>
 
-    <script>
-        let audioCtx;
-        let osc;
+    <footer class="border-t border-slate-800 py-8 text-center text-xs text-slate-500">
+        <p>© 2026 RestSync Health Technologies. All rights reserved.</p>
+    </footer>
 
-        function playFreq(freq) {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (osc) osc.stop();
-            osc = audioCtx.createOscillator();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            osc.connect(audioCtx.destination);
-            osc.start();
+    <!-- Logic Script -->
+    <script>
+        lucide.createIcons();
+
+        // 1. Quiz Logic
+        function calculateScore() {
+            const q1 = parseInt(document.getElementById('q1').value);
+            const q2 = parseInt(document.getElementById('q2').value);
+            const q3 = parseInt(document.getElementById('q3').value);
+            const total = q1 + q2 + q3;
+
+            document.getElementById('quizResult').classList.remove('hidden');
+            document.getElementById('scoreDisplay').innerText = total + '/100';
+
+            let advice = "";
+            if(total >= 80) advice = "Excellent circadian health! Keep up your morning sunlight routine.";
+            else if(total >= 50) advice = "Moderate score. Try setting a strict caffeine cutoff and dimming evening lights.";
+            else advice = "Low score. Focus on morning sunlight exposure and listening to Delta waves before bed.";
+
+            document.getElementById('scoreAdvice').innerText = advice;
         }
 
-        function stopSound() {
-            if (osc) osc.stop();
+        // 2. Cycle Calculator Logic
+        function calculateCycles() {
+            const timeVal = document.getElementById('bedTimeInput').value;
+            if(!timeVal) return;
+
+            const [hours, mins] = timeVal.split(':').map(Number);
+            let date = new Date();
+            date.setHours(hours, mins, 0);
+
+            // Add 15 mins average time to fall asleep
+            date.setMinutes(date.getMinutes() + 15);
+
+            const resultsContainer = document.getElementById('cycleResults');
+            resultsContainer.innerHTML = '';
+            resultsContainer.classList.remove('hidden');
+
+            // Show 3, 4, 5, 6 cycles (90 mins each)
+            const cycles = [3, 4, 5, 6];
+            cycles.forEach(c => {
+                let wakeDate = new Date(date.getTime() + c * 90 * 60000);
+                let timeString = wakeDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                let box = document.createElement('div');
+                box.className = 'bg-slate-950 p-3 border border-slate-800 rounded-lg text-center';
+                box.innerHTML = `<div class="text-xs text-slate-400">${c} Cycles (${c*1.5} hrs)</div><div class="text-lg font-bold text-indigo-400">${timeString}</div>`;
+                resultsContainer.appendChild(box);
+            });
+        }
+
+        // 3. Audio Engine Logic
+        let audioCtx;
+        let activeOsc;
+
+        function playAudio(type) {
+            if(!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            stopAudio();
+
+            document.getElementById('audioStatus').innerText = 'Status: Playing ' + type.toUpperCase() + ' sound...';
+
+            if(type === 'theta') {
+                activeOsc = audioCtx.createOscillator();
+                activeOsc.type = 'sine';
+                activeOsc.frequency.setValueAtTime(432, audioCtx.currentTime);
+                activeOsc.connect(audioCtx.destination);
+                activeOsc.start();
+            } else if(type === 'delta') {
+                activeOsc = audioCtx.createOscillator();
+                activeOsc.type = 'sine';
+                activeOsc.frequency.setValueAtTime(100, audioCtx.currentTime);
+                activeOsc.connect(audioCtx.destination);
+                activeOsc.start();
+            } else if(type === 'brown') {
+                const bufferSize = audioCtx.sampleRate * 2;
+                const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const output = noiseBuffer.getChannelData(0);
+                let lastOut = 0.0;
+                for (let i = 0; i < bufferSize; i++) {
+                    let white = Math.random() * 2 - 1;
+                    output[i] = (lastOut + (0.02 * white)) / 1.02;
+                    lastOut = output[i];
+                    output[i] *= 3.5;
+                }
+                const brownNoise = audioCtx.createBufferSource();
+                brownNoise.buffer = noiseBuffer;
+                brownNoise.loop = true;
+                brownNoise.connect(audioCtx.destination);
+                brownNoise.start();
+                activeOsc = brownNoise;
+            }
+        }
+
+        function stopAudio() {
+            if(activeOsc) {
+                activeOsc.stop();
+                activeOsc = null;
+            }
+            document.getElementById('audioStatus').innerText = 'Status: Audio Idle';
         }
     </script>
 </body>
-  </html>
+    </html>
+
   
