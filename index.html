@@ -116,7 +116,7 @@
       <p class="text-xs text-slate-400 font-medium">Inhale for 4s • Hold for 7s • Exhale for 8s</p>
     </section>
 
-    <!-- 5. Calm Night Assistant (10 Free / 20 Daily Subscribed) -->
+    <!-- 5. Calm Night Assistant (Dynamic & Contextual) -->
     <section class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
@@ -130,21 +130,22 @@
 
       <p class="text-xs text-slate-400">Late-night overthinking & anxiety de-escalator.</p>
 
-      <div id="chat-box" class="chat-scroll h-48 overflow-y-auto space-y-2.5 p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-xs">
-        <div class="bg-slate-800/80 p-3 rounded-xl max-w-[85%] text-slate-200">
-          Hi there. If racing thoughts or anxiety are keeping you awake, type what's on your mind. I'm here to help you slow down.
+      <div id="chat-box" class="chat-scroll h-52 overflow-y-auto space-y-2.5 p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-xs">
+        <div class="bg-slate-800/80 p-3 rounded-xl max-w-[85%] text-slate-200 leading-relaxed">
+          Welcome to your quiet space. If racing thoughts, stress, or nighttime anxiety are keeping you awake, share what's on your mind. Let's wind down together.
         </div>
       </div>
 
       <div id="chat-input-container" class="flex gap-2">
-        <input type="text" id="chat-input" placeholder="Type your anxiety or worry..." 
-          class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500">
+        <input type="text" id="chat-input" placeholder="Type your anxiety, thoughts, or worry..." 
+          class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500"
+          onkeypress="if(event.key === 'Enter') sendChatMessage()">
         <button onclick="sendChatMessage()" class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-xl text-xs font-bold text-white transition shadow-md">
           Send
         </button>
       </div>
 
-      <!-- Paywall Lock Card (Hidden Initially) -->
+      <!-- Paywall Lock Card -->
       <div id="chat-paywall" class="hidden bg-indigo-950/90 border border-indigo-500/40 p-4 rounded-xl text-center space-y-3">
         <p class="text-xs text-indigo-200 font-bold">🔒 Free Message Limit Reached</p>
         <p class="text-[11px] text-slate-300 leading-relaxed">
@@ -262,13 +263,12 @@
       container.innerHTML = `<p class="font-bold text-indigo-300 border-b border-slate-800 pb-1 mb-2">Recommended Wake Times:</p>` + results.join('<br>');
     }
 
-    /* Chat logic (10 msg free / 20 msg subscribed daily limit) */
+    /* Chat logic (Limits: 10 Free Total / 20 Subscribed Daily) */
     let isSubscribed = localStorage.getItem('restsync_is_subscribed') === 'true';
     let messageCount = parseInt(localStorage.getItem('restsync_chat_count') || '0');
     let lastResetDate = localStorage.getItem('restsync_chat_reset') || '';
     const todayStr = new Date().toDateString();
 
-    // Reset daily count for subscribers
     if (isSubscribed && lastResetDate !== todayStr) {
       messageCount = 0;
       localStorage.setItem('restsync_chat_count', '0');
@@ -277,6 +277,7 @@
 
     const MAX_FREE = 10;
     const MAX_SUBSCRIBED = 20;
+    let lastResponseIndex = -1;
 
     function updateChatUI() {
       const limit = isSubscribed ? MAX_SUBSCRIBED : MAX_FREE;
@@ -307,7 +308,7 @@
 
       const chatBox = document.getElementById('chat-box');
       const userMsg = document.createElement('div');
-      userMsg.className = 'bg-indigo-900/60 p-2.5 rounded-xl max-w-[85%] ml-auto text-slate-100 text-right';
+      userMsg.className = 'bg-indigo-900/60 p-2.5 rounded-xl max-w-[85%] ml-auto text-slate-100 text-right leading-relaxed';
       userMsg.innerText = text;
       chatBox.appendChild(userMsg);
 
@@ -318,26 +319,79 @@
 
       setTimeout(() => {
         const botMsg = document.createElement('div');
-        botMsg.className = 'bg-slate-800/80 p-2.5 rounded-xl max-w-[85%] text-slate-200';
-        botMsg.innerText = getCalmResponse(text);
+        botMsg.className = 'bg-slate-800/80 p-2.5 rounded-xl max-w-[85%] text-slate-200 leading-relaxed';
+        botMsg.innerText = getDynamicCalmResponse(text);
         chatBox.appendChild(botMsg);
         chatBox.scrollTop = chatBox.scrollHeight;
       }, 500);
     }
 
-    function getCalmResponse(input) {
+    function getDynamicCalmResponse(input) {
       const lower = input.toLowerCase();
-      if (lower.includes('work') || lower.includes('stress') || lower.includes('tomorrow')) {
-        return "Whatever is waiting tomorrow can wait until sunrise. Focus on your breathing ring above and drop your shoulders down.";
-      } else if (lower.includes('can\'t sleep') || lower.includes('awake') || lower.includes('tired')) {
-        return "Try the 5-4-3-2-1 technique: Name 5 physical objects around you right now. Let your body rest even if your mind is still active.";
-      } else {
-        return "Notice where you are holding tension right now—your jaw or shoulders. Gently release it as you exhale. You are safe to rest.";
+
+      // Category 1: Work / Money / Tasks / Tomorrow
+      if (lower.includes('work') || lower.includes('job') || lower.includes('stress') || lower.includes('money') || lower.includes('tomorrow') || lower.includes('busy')) {
+        const workReplies = [
+          "Tomorrow's tasks are sleeping right now too. Leave them in tomorrow—your only job tonight is resting your physical body.",
+          "Write down any urgent thought on paper nearby if you need to. Once it's on paper, your brain doesn't have to hold onto it tonight.",
+          "Notice how heavy your mind feels when worrying about tomorrow. Let's shift focus: take a slow 4-second breath in, hold it, and release the tension in your hands."
+        ];
+        return getRandomReply(workReplies);
       }
+
+      // Category 2: Heart Racing / Panic / Anxiety / Scared
+      if (lower.includes('panic') || lower.includes('anxiety') || lower.includes('heart') || lower.includes('scared') || lower.includes('fear') || lower.includes('overthinking')) {
+        const panicReplies = [
+          "You are safe right now in your room. Put one hand on your chest and one on your belly. Feel your chest gently rise and fall.",
+          "Anxiety is just adrenaline passing through your nerves—it cannot harm you. Let's do the 5-4-3-2-1 check: look around and silently name 3 blue or dark objects in your room.",
+          "Your nervous system is just hyper-alert right now. Try turning on the Theta 432Hz audio generator above to help slow down your brainwaves."
+        ];
+        return getRandomReply(panicReplies);
+      }
+
+      // Category 3: Can't Sleep / Awake / Insomnia Frustration
+      if (lower.includes('sleep') || lower.includes('awake') || lower.includes('tired') || lower.includes('hours') || lower.includes('night') || lower.includes('insomnia')) {
+        const sleepReplies = [
+          "Remember: resting quietly with your eyes closed in the dark still gives your heart, muscles, and brain 70% of the restoration of full sleep. There is no pressure to force sleep.",
+          "Frustration keeps the brain alert. Try 'Cognitive Shuffling': pick a random word like 'BED' and think of words starting with B, then E, then D.",
+          "Instead of trying to fall asleep, try to stay gently awake with your eyes heavy. Paradoxically, letting go of the goal to sleep helps sleep happen naturally."
+        ];
+        return getRandomReply(sleepReplies);
+      }
+
+      // Category 4: Body Tension / Pain / Headache / Restless
+      if (lower.includes('pain') || lower.includes('head') || lower.includes('body') || lower.includes('jaw') || lower.includes('tight') || lower.includes('restless')) {
+        const bodyReplies = [
+          "Unclench your jaw right now and let your tongue rest loosely at the bottom of your mouth. Notice how much lighter your face feels.",
+          "Drop your shoulders down away from your ears. Take a deep breath in through your nose, and exhale with a soft sigh.",
+          "Wiggle your toes gently, then let your legs go completely heavy into the mattress. Feel the bed fully supporting your weight."
+        ];
+        return getRandomReply(bodyReplies);
+      }
+
+      // Category 5: Fallback Dynamic Pool
+      const dynamicFallbackPool = [
+        "I hear you. Take a slow breath with the 4-7-8 breathing ring above. You don't have to solve anything right now.",
+        "Your thoughts are like clouds passing in the night sky. You don't have to follow every thought—just let them float by.",
+        "Softly focus on the quiet sound of your breathing. With every exhale, let your muscles sink a little deeper into the bed.",
+        "Thank you for sharing that. Remind yourself: tonight is for healing and rest. Whatever is on your mind can be handled far better after a good rest.",
+        "Take a moment to adjust your pillow or blanket so you're as comfortable as possible. Let your eyelids get heavy and soft."
+      ];
+
+      return getRandomReply(dynamicFallbackPool);
+    }
+
+    function getRandomReply(replyArray) {
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * replyArray.length);
+      } while (idx === lastResponseIndex && replyArray.length > 1);
+      
+      lastResponseIndex = idx;
+      return replyArray[idx];
     }
 
     updateChatUI();
   </script>
 </body>
-  </html>
-  
+</html>
