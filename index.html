@@ -1,4 +1,4 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -8,67 +8,195 @@
   <style>
     .chat-scroll::-webkit-scrollbar { width: 4px; }
     .chat-scroll::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); opacity: 0.3; }
+      30.7% { transform: scale(1.6); opacity: 0.9; } /* 4s Inhale */
+      84.6% { transform: scale(1.6); opacity: 0.9; } /* 7s Hold */
+    }
+    .breathing-ring { animation: breathe 19s infinite ease-in-out; }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen pb-12">
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen pb-16">
 
   <!-- Header -->
-  <header class="border-b border-slate-800 p-4 text-center bg-slate-900/50 backdrop-blur">
+  <header class="border-b border-slate-800 p-4 text-center bg-slate-900/50 backdrop-blur sticky top-0 z-50">
     <h1 class="text-2xl font-bold tracking-tight text-indigo-400">RestSync</h1>
-    <p class="text-xs text-slate-400">Circadian Diagnostic & Anxiety Relief Engine</p>
+    <p class="text-xs text-slate-400">Circadian Diagnostic & Sleep Optimization Suite</p>
   </header>
 
   <main class="max-w-md mx-auto p-4 space-y-6">
 
-    <!-- Free Tools Summary -->
+    <!-- 1. Diagnostic Quiz -->
     <section class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-lg space-y-3">
-      <h2 class="text-lg font-semibold text-slate-200">🌙 Free Nightly Tools</h2>
-      <p class="text-xs text-slate-400">Diagnostic Quiz, REM Calculator, 4-7-8 Breathing Ring, and Binaural Beats are active.</p>
+      <h2 class="text-md font-bold text-indigo-300">📊 Circadian Health Diagnostic</h2>
+      <div id="quiz-container" class="space-y-3 text-xs">
+        <p class="text-slate-300">How many hours of sleep did you get last night?</p>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="calculateScore(50)" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-slate-200">Under 6 hrs</button>
+          <button onclick="calculateScore(75)" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-slate-200">6–7 hrs</button>
+          <button onclick="calculateScore(100)" class="bg-slate-800 hover:bg-slate-700 p-2 rounded text-slate-200">7–9 hrs</button>
+        </div>
+        <div id="quiz-result" class="hidden p-3 bg-indigo-950/60 border border-indigo-800/50 rounded text-center">
+          <span class="text-slate-400">Your Score: </span><strong id="score-val" class="text-indigo-400 font-bold text-sm">--</strong>
+        </div>
+      </div>
     </section>
 
-    <!-- Calm & Anxiety Assistant (Freemium 10 Messages) -->
-    <section class="bg-slate-900 border border-indigo-900/50 rounded-xl p-4 shadow-xl space-y-4">
-      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+    <!-- 2. REM Sleep Calculator -->
+    <section class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-lg space-y-3">
+      <h2 class="text-md font-bold text-indigo-300">⏰ REM Sleep Calculator</h2>
+      <p class="text-xs text-slate-400">Calculate ideal wake-up times based on 90-minute sleep cycles.</p>
+      <div class="flex gap-2">
+        <input type="time" id="bedtime" value="22:30" class="bg-slate-950 border border-slate-700 rounded px-3 py-1.5 text-xs text-slate-100 flex-1 focus:outline-none">
+        <button onclick="calculateREM()" class="bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 rounded text-xs font-semibold">Calculate</button>
+      </div>
+      <div id="rem-results" class="hidden text-xs space-y-1 text-slate-300 bg-slate-950/50 p-2 rounded border border-slate-800"></div>
+    </section>
+
+    <!-- 3. Audio & Binaural Sound Engine -->
+    <section class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-lg space-y-3">
+      <h2 class="text-md font-bold text-indigo-300">🎧 Melatonin & Sound Generator</h2>
+      <div class="grid grid-cols-2 gap-2 text-xs">
+        <button onclick="playFrequency(432)" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded text-slate-200 flex flex-col items-center">
+          <span class="font-bold">Theta 432 Hz</span>
+          <span class="text-[10px] text-slate-400">Deep Relaxation</span>
+        </button>
+        <button onclick="playFrequency(2.5)" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded text-slate-200 flex flex-col items-center">
+          <span class="font-bold">Delta 2.5 Hz</span>
+          <span class="text-[10px] text-slate-400">Slow-Wave Sleep</span>
+        </button>
+      </div>
+      <button onclick="stopAudio()" id="stop-btn" class="hidden w-full bg-rose-950 text-rose-300 border border-rose-800 py-1.5 rounded text-xs font-semibold">Stop Audio</button>
+    </section>
+
+    <!-- 4. 4-7-8 Breathing Ring -->
+    <section class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-lg text-center space-y-3">
+      <h2 class="text-md font-bold text-indigo-300">🫁 4-7-8 Breathing Visualizer</h2>
+      <div class="relative w-24 h-24 mx-auto flex items-center justify-center my-2">
+        <div class="breathing-ring absolute inset-0 bg-indigo-500 rounded-full blur-md"></div>
+        <div class="w-16 h-16 bg-indigo-600/40 border border-indigo-400 rounded-full flex items-center justify-center z-10 text-[10px] font-bold tracking-widest uppercase">
+          Relax
+        </div>
+      </div>
+      <p class="text-[11px] text-slate-400">Inhale 4s • Hold 7s • Exhale 8s</p>
+    </section>
+
+    <!-- 5. Calm Night Assistant (10 Messages Free) -->
+    <section class="bg-slate-900 border border-indigo-900/50 rounded-xl p-4 shadow-xl space-y-3">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-2">
         <div>
           <h2 class="text-md font-bold text-indigo-300">💬 Calm Night Assistant</h2>
-          <p class="text-xs text-slate-400">Late-night overthinking & anxiety de-escalator</p>
+          <p class="text-[11px] text-slate-400">Late-night overthinking & anxiety coach</p>
         </div>
-        <span id="chat-counter" class="text-xs bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-1 rounded-full">
+        <span id="chat-counter" class="text-[10px] bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded-full">
           10 free left
         </span>
       </div>
 
-      <!-- Chat Window -->
-      <div id="chat-box" class="chat-scroll h-56 overflow-y-auto space-y-3 p-2 bg-slate-950/70 rounded-lg border border-slate-800 text-sm">
-        <div class="bg-slate-800/80 p-3 rounded-lg max-w-[85%] text-slate-200">
+      <div id="chat-box" class="chat-scroll h-44 overflow-y-auto space-y-2 p-2 bg-slate-950/70 rounded-lg border border-slate-800 text-xs">
+        <div class="bg-slate-800/80 p-2.5 rounded-lg max-w-[88%] text-slate-200">
           Hi there. If racing thoughts or anxiety are keeping you awake, type what's on your mind. I'm here to help you slow down.
         </div>
       </div>
 
-      <!-- Input Area / Lock Screen -->
-      <div id="chat-controls" class="space-y-2">
-        <div class="flex gap-2">
-          <input type="text" id="chat-input" placeholder="Type your anxiety or worry..." 
-            class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
-          <button onclick="sendChatMessage()" class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg text-sm font-semibold transition">
-            Send
-          </button>
-        </div>
+      <div id="chat-controls" class="flex gap-2">
+        <input type="text" id="chat-input" placeholder="Type your anxiety or worry..." 
+          class="flex-1 bg-slate-950 border border-slate-700 rounded px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500">
+        <button onclick="sendChatMessage()" class="bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 rounded text-xs font-semibold">Send</button>
       </div>
 
-      <!-- Paywall Lock Card (Hidden Initially) -->
-      <div id="chat-paywall" class="hidden bg-indigo-950/80 border border-indigo-500/30 p-4 rounded-lg text-center space-y-3">
-        <p class="text-xs text-indigo-200 font-medium">🔒 You've used your 10 free daily calm messages.</p>
-        <p class="text-xs text-slate-300">Unlock unlimited 24/7 access to your AI Nighttime Assistant and all premium sleep sounds.</p>
-        <button onclick="alert('Redirecting to $10 LemonSqueezy Checkout...')" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs font-bold uppercase tracking-wider text-white shadow-lg transition">
-          Unlock Unlimited Chat — $10/mo
+      <div id="chat-paywall" class="hidden bg-indigo-950/80 border border-indigo-500/30 p-3 rounded-lg text-center space-y-2">
+        <p class="text-xs text-indigo-200 font-medium">🔒 10 Free Daily Messages Used</p>
+        <p class="text-[11px] text-slate-300">Subscribe to unlock unlimited 24/7 AI coaching and all premium sounds.</p>
+        <button onclick="alert('Redirecting to $10 LemonSqueezy Checkout...')" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 rounded text-xs font-bold uppercase tracking-wider text-white">
+          Unlock Unlimited — $10/mo
         </button>
+      </div>
+    </section>
+
+    <!-- 6. Pricing Plans -->
+    <section class="space-y-3 pt-2">
+      <h2 class="text-center text-sm font-bold text-slate-400 tracking-wider uppercase">Upgrade Options</h2>
+      <div class="grid grid-cols-2 gap-3 text-xs">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 text-center space-y-2 flex flex-col justify-between">
+          <div>
+            <h3 class="font-bold text-slate-200">Basic Tier</h3>
+            <div class="text-lg font-extrabold text-indigo-400 mt-1">$10<span class="text-[10px] text-slate-400 font-normal">/mo</span></div>
+            <p class="text-[10px] text-slate-400 mt-1">Unlimited Audio & Unlimited Calm Chat access.</p>
+          </div>
+          <button onclick="alert('Connecting to LemonSqueezy $10 Checkout')" class="w-full py-1.5 bg-indigo-600 hover:bg-indigo-500 rounded font-semibold text-white transition">Subscribe</button>
+        </div>
+
+        <div class="bg-slate-900 border border-indigo-500/40 rounded-xl p-3 text-center space-y-2 flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute -right-6 top-2 bg-indigo-600 text-white text-[9px] font-bold px-6 py-0.5 rotate-45">PRO</div>
+          <div>
+            <h3 class="font-bold text-slate-200">Pro Suite</h3>
+            <div class="text-lg font-extrabold text-indigo-400 mt-1">$15<span class="text-[10px] text-slate-400 font-normal">/mo</span></div>
+            <p class="text-[10px] text-slate-400 mt-1">Full Sound Suite + Personalized Sleep Reports.</p>
+          </div>
+          <button onclick="alert('Connecting to LemonSqueezy $15 Checkout')" class="w-full py-1.5 bg-indigo-600 hover:bg-indigo-500 rounded font-semibold text-white transition">Subscribe</button>
+        </div>
       </div>
     </section>
 
   </main>
 
   <script>
+    /* Audio Engine */
+    let audioCtx = null;
+    let currentOsc = null;
+
+    function playFrequency(freq) {
+      if (currentOsc) stopAudio();
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      currentOsc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      
+      currentOsc.type = 'sine';
+      currentOsc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      
+      currentOsc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      currentOsc.start();
+      document.getElementById('stop-btn').classList.remove('hidden');
+    }
+
+    function stopAudio() {
+      if (currentOsc) {
+        currentOsc.stop();
+        currentOsc.disconnect();
+        currentOsc = null;
+      }
+      document.getElementById('stop-btn').classList.add('hidden');
+    }
+
+    /* Calculator & Quiz Logic */
+    function calculateScore(score) {
+      document.getElementById('quiz-result').classList.remove('hidden');
+      document.getElementById('score-val').innerText = score + ' / 100';
+    }
+
+    function calculateREM() {
+      const timeVal = document.getElementById('bedtime').value;
+      if (!timeVal) return;
+      const [h, m] = timeVal.split(':').map(Number);
+      let date = new Date();
+      date.setHours(h, m, 0);
+
+      let results = [];
+      for (let i = 4; i <= 6; i++) {
+        let cycleDate = new Date(date.getTime() + (i * 90 + 14) * 60000);
+        let hours = cycleDate.getHours().toString().padStart(2, '0');
+        let mins = cycleDate.getMinutes().toString().padStart(2, '0');
+        results.push(`Cycle ${i} (${i * 1.5} hrs sleep): <strong>${hours}:${mins}</strong>`);
+      }
+      const container = document.getElementById('rem-results');
+      container.classList.remove('hidden');
+      container.innerHTML = `<p class="font-semibold text-indigo-300 border-b border-slate-800 pb-1 mb-1">Optimal Wake Times:</p>` + results.join('<br>');
+    }
+
+    /* Chat logic (10 msg limit) */
     let messageCount = parseInt(localStorage.getItem('restsync_chat_count') || '0');
     const MAX_FREE = 10;
 
@@ -88,10 +216,8 @@
       if (!text || messageCount >= MAX_FREE) return;
 
       const chatBox = document.getElementById('chat-box');
-
-      // User Message
       const userMsg = document.createElement('div');
-      userMsg.className = 'bg-indigo-900/60 p-3 rounded-lg max-w-[85%] ml-auto text-slate-100 text-right';
+      userMsg.className = 'bg-indigo-900/60 p-2.5 rounded-lg max-w-[88%] ml-auto text-slate-100 text-right';
       userMsg.innerText = text;
       chatBox.appendChild(userMsg);
 
@@ -100,29 +226,28 @@
       localStorage.setItem('restsync_chat_count', messageCount);
       updateCounterUI();
 
-      // Smart De-escalation Bot Response
       setTimeout(() => {
         const botMsg = document.createElement('div');
-        botMsg.className = 'bg-slate-800/80 p-3 rounded-lg max-w-[85%] text-slate-200';
+        botMsg.className = 'bg-slate-800/80 p-2.5 rounded-lg max-w-[88%] text-slate-200';
         botMsg.innerText = getCalmResponse(text);
         chatBox.appendChild(botMsg);
         chatBox.scrollTop = chatBox.scrollHeight;
-      }, 600);
+      }, 500);
     }
 
     function getCalmResponse(input) {
       const lower = input.toLowerCase();
       if (lower.includes('work') || lower.includes('stress') || lower.includes('tomorrow')) {
-        return "Whatever is waiting tomorrow can wait until sunrise. Take a deep 4-7-8 breath with our ring above and drop your shoulders down.";
+        return "Whatever is waiting tomorrow can wait until sunrise. Focus on your breathing ring above and drop your shoulders down.";
       } else if (lower.includes('can\'t sleep') || lower.includes('awake') || lower.includes('tired')) {
-        return "Try the 5-4-3-2-1 technique: Name 5 things you can feel right now, like your blanket or pillow. Let your body rest even if your mind is active.";
+        return "Try the 5-4-3-2-1 technique: Name 5 things around you right now. Let your body rest even if your mind is still awake.";
       } else {
-        return "Notice where you are holding tension right now—your jaw, shoulders, or hands. Slowly release it as you exhale. You are safe to sleep.";
+        return "Notice where you are holding tension right now—your jaw or shoulders. Gently release it as you exhale. You are safe to rest.";
       }
     }
 
-    // Initialize UI on load
     updateCounterUI();
   </script>
 </body>
-</html>
+   </html>
+   
