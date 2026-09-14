@@ -151,9 +151,9 @@
         <p class="text-[11px] text-slate-300 leading-relaxed">
           You've used your 10 free trial messages. Subscribe to Basic ($10/mo) or Pro ($15/mo) to unlock 20 daily coaching messages.
         </p>
-        <button onclick="alert('Redirecting to LemonSqueezy $10 Checkout...')" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-xs font-bold uppercase tracking-wider text-white shadow-lg transition">
+        <a href="https://restsync.lemonsqueezy.com/checkout/buy/e8233679-d75e-45e8-90ee-babaec66b612" class="block w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-xs font-bold uppercase tracking-wider text-white shadow-lg transition text-center">
           Unlock 20 Daily Messages — $10/mo
-        </button>
+        </a>
       </div>
     </section>
 
@@ -178,9 +178,9 @@
               <li>✓ Sleep Health Scorecard</li>
             </ul>
           </div>
-          <button onclick="alert('Redirecting to LemonSqueezy $10 Checkout...')" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-bold text-white transition shadow-md">
+          <a href="https://restsync.lemonsqueezy.com/checkout/buy/e8233679-d75e-45e8-90ee-babaec66b612" class="block w-full py-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-bold text-white transition shadow-md text-center">
             Subscribe $10
-          </button>
+          </a>
         </div>
 
         <!-- Pro Plan $15 -->
@@ -196,9 +196,9 @@
               <li>✓ Weekly Sleep Reports</li>
             </ul>
           </div>
-          <button onclick="alert('Redirecting to LemonSqueezy $15 Checkout...')" class="w-full py-2 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 rounded-xl font-bold text-white transition shadow-lg">
+          <a href="https://restsync.lemonsqueezy.com/checkout/buy/0644b5a2-09be-489f-ad18-80a0296b118a" class="block w-full py-2 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 rounded-xl font-bold text-white transition shadow-lg text-center">
             Subscribe $15
-          </button>
+          </a>
         </div>
 
       </div>
@@ -277,7 +277,6 @@
 
     const MAX_FREE = 10;
     const MAX_SUBSCRIBED = 20;
-    let lastResponseIndex = -1;
 
     function updateChatUI() {
       const limit = isSubscribed ? MAX_SUBSCRIBED : MAX_FREE;
@@ -326,6 +325,10 @@
       }, 500);
     }
 
+    function getRandomReply(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
     function getDynamicCalmResponse(input) {
       const lower = input.toLowerCase();
 
@@ -343,7 +346,7 @@
       if (lower.includes('panic') || lower.includes('anxiety') || lower.includes('heart') || lower.includes('scared') || lower.includes('fear') || lower.includes('overthinking')) {
         const panicReplies = [
           "You are safe right now in your room. Put one hand on your chest and one on your belly. Feel your chest gently rise and fall.",
-          "Anxiety is just adrenaline passing through your nerves—it cannot harm you. Let's do the 5-4-3-2-1 check: look around and silently name 3 blue or dark objects in your room.",
+          "Anxiety is just adrenaline passing through your nerves—it cannot harm you. Let's do the 5-4-3-2-1 check: look around and silently name 3 dark objects in your room.",
           "Your nervous system is just hyper-alert right now. Try turning on the Theta 432Hz audio generator above to help slow down your brainwaves."
         ];
         return getRandomReply(panicReplies);
@@ -371,24 +374,11 @@
 
       // Category 5: Fallback Dynamic Pool
       const dynamicFallbackPool = [
-        "I hear you. Take a slow breath with the 4-7-8 breathing ring above. You don't have to solve anything right now.",
-        "Your thoughts are like clouds passing in the night sky. You don't have to follow every thought—just let them float by.",
-        "Softly focus on the quiet sound of your breathing. With every exhale, let your muscles sink a little deeper into the bed.",
-        "Thank you for sharing that. Remind yourself: tonight is for healing and rest. Whatever is on your mind can be handled far better after a good rest.",
-        "Take a moment to adjust your pillow or blanket so you're as comfortable as possible. Let your eyelids get heavy and soft."
+        "I hear you. Take a slow breath with the 4-7-8 breathing ring above. You are completely safe right now.",
+        "Let your thoughts drift past like clouds in the night sky. You don't need to answer or solve any of them right now.",
+        "Give yourself permission to simply rest. Soften your shoulders and let your body melt into the bed."
       ];
-
       return getRandomReply(dynamicFallbackPool);
-    }
-
-    function getRandomReply(replyArray) {
-      let idx;
-      do {
-        idx = Math.floor(Math.random() * replyArray.length);
-      } while (idx === lastResponseIndex && replyArray.length > 1);
-      
-      lastResponseIndex = idx;
-      return replyArray[idx];
     }
 
     updateChatUI();
